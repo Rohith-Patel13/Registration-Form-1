@@ -6,22 +6,51 @@ import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css'
 const RegistrationForm = () => {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
-
-  const eventHandler = e => {
-    console.log(e.target.value)
-  }
+  const [isRequiredFirstName, setIsRequiredFirstName] = useState(false)
+  const [isRequiredLastName, setIsRequiredLastName] = useState(false)
 
   const firstNameTyping = e => {
-    console.log(e.target.value)
     setFirstName(e.target.value)
   }
 
   const lastNameTyping = e => {
-    console.log(e.target.value)
     setLastName(e.target.value)
   }
 
+  const eventHandlerFirstName = e => {
+    if (e.target.value === '') {
+      setIsRequiredFirstName(true)
+      console.log('blur event on first name executed')
+      return
+    }
+    setIsRequiredFirstName(false)
+  }
+  const eventHandlerLastName = e => {
+    if (e.target.value === '') {
+      setIsRequiredLastName(true)
+      console.log('blur event on last name executed')
+      return
+    }
+    setIsRequiredLastName(false)
+  }
+
   const submitBtnClicked = () => {
+    if (firstName === '') {
+      setIsRequiredFirstName(true)
+    } else {
+      setIsRequiredFirstName(false)
+    }
+
+    if (lastName === '') {
+      setIsRequiredLastName(true)
+    } else {
+      setIsRequiredLastName(false)
+    }
+
+    if (!isRequiredFirstName && !isRequiredLastName) {
+      console.log('render RegisterSuccess component')
+    }
+
     console.log('submit button clicked')
   }
 
@@ -38,9 +67,10 @@ const RegistrationForm = () => {
             type="text"
             className="form-control"
             value={firstName}
-            onBlur={eventHandler}
+            onBlur={eventHandlerFirstName}
             onChange={firstNameTyping}
           />
+          {isRequiredFirstName ? <p className="errorText">Required</p> : ''}
         </div>
         <div className="formGroup">
           <label htmlFor="lastNameId" className="textHead">
@@ -51,9 +81,10 @@ const RegistrationForm = () => {
             type="text"
             className="form-control"
             value={lastName}
-            onBlur={eventHandler}
+            onBlur={eventHandlerLastName}
             onChange={lastNameTyping}
           />
+          {isRequiredLastName ? <p className="errorText">Required</p> : ''}
         </div>
         <button
           className="btn btn-danger"
